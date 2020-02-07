@@ -1,6 +1,8 @@
 *.tt
 *.yaml
 
+.DS_Store
+
 entities.json
 typecheck-cache.txt
 
