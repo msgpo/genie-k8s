@@ -27,7 +27,7 @@ mkdir -p "/shared/tensorboard/${project}/${experiment}/${owner}/${model}"
 
 on_error () {
   # on failure ship everything to s3
-  aws s3 sync $modeldir/ s3://almond-research/${owner}/models/${experiment}/${model}/failed_train/
+  aws s3 sync $modeldir/ s3://almond-research/${owner}/models/${project}/${experiment}/${model}/failed_train/ --exclude "*dataset/*"  --exclude "*cache/"
 }
 trap on_error ERR
 
