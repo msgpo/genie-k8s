@@ -9,14 +9,14 @@ set -e
 set -x
 
 on_error () {
-# on failure ship everything to s3
-aws s3 sync . s3://almond-research/${owner}/models/${project}/${experiment}/${model}/failed_eval/   --exclude "*dataset/*"  --exclude "*cache/"
-}
+  # on failure ship everything to s3
+  aws s3 sync . s3://almond-research/${owner}/models/${project}/${experiment}/${model}/failed_eval/   --exclude "*dataset/*"  --exclude "*cache/"
+  }
 trap on_error ERR
 
 
 pwd
-aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/ --exclude "*eval/*"
+aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} $HOME/dataset/ --exclude "*eval/*"
 
 
 mkdir -p ${experiment}/models

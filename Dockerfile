@@ -7,6 +7,9 @@ ARG GENIENLP_VERSION=master
 RUN pip3 install --upgrade pip
 RUN git fetch && git checkout ${GENIENLP_VERSION} && pip3 install -e . && pip3 install 'git+https://github.com/LiyuanLucasLiu/RAdam#egg=radam'
 
+#RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings xlm-roberta-large
+#RUN chmod 0755 /usr/local/share/genienlp/embeddings/[0-9a-f]*
+
 # uncomment the models you want to use
 # RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking
 # RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking-finetuned-squad
