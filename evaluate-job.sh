@@ -16,7 +16,7 @@ trap on_error ERR
 
 
 pwd
-aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} $HOME/dataset/ --exclude "*eval/*"
+aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} ${HOME}/dataset/ --exclude "*eval/*"
 
 
 mkdir -p ${experiment}/models
@@ -25,13 +25,14 @@ aws s3 sync s3://almond-research/${owner}/models/${project}/${experiment}/${mode
 
 mkdir -p "$HOME/cache"
 mkdir -p "$HOME/eval_dir"
+mkdir -p $HOME/dataset_linked/"${task_name//_/\/}"
 
-ln -s "$HOME/dataset" "$HOME/dataset/${task_name}"
+ln -s $HOME/dataset/* $HOME/dataset_linked/"${task_name//_/\/}"
 
 ls -R
 
 genienlp predict \
-  --data "$HOME/dataset" \
+  --data "$HOME/dataset_linked" \
   --embeddings ${GENIENLP_EMBEDDINGS} \
   --cache "$HOME/cache" \
   --path "$HOME/${experiment}/models/${model}/" \

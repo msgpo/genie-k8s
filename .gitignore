@@ -15,3 +15,5 @@ workdir/spotify
 workdir/mturk-batches
 
 .DS_Store
+
+*log*

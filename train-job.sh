@@ -15,13 +15,14 @@ if ! test  ${load_from} = 'None' ; then
 	aws s3 sync ${load_from}/ "$modeldir"/ --exclude "iteration_*.pth" --exclude "*eval/*"  --exclude "*.log"
 fi
 
-aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
+aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} ${HOME}/dataset/
 
 rm -fr "$modeldir/dataset"
-mkdir "$modeldir/dataset"
+mkdir -p "$modeldir/dataset/"${task_name//_/\/}""
 rm -fr "$modeldir/cache"
 mkdir -p "$modeldir/cache"
 ln -s "$HOME/dataset" "$modeldir/dataset/almond"
+ln -s ${HOME}/dataset/* $modeldir/dataset/"${task_name//_/\/}"
 ln -s $modeldir /home/genie-toolkit/current
 mkdir -p "/shared/tensorboard/${project}/${experiment}/${owner}/${model}"
 
@@ -31,6 +32,7 @@ on_error () {
 }
 trap on_error ERR
 
+ls -R
 
 genienlp train \
   --data "$modeldir/dataset" \
