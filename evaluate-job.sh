@@ -21,7 +21,7 @@ aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experimen
 
 mkdir -p ${experiment}/models
 
-aws s3 sync s3://almond-research/${owner}/models/${project}/${experiment}/${model}/ ${experiment}/models/${model}/ --exclude "iteration_*.pth" --exclude '*_optim.pth' --exclude "*eval/*"
+aws s3 sync s3://almond-research/${owner}/models/${project}/${experiment}/${model}/ ${experiment}/models/${model}/ --exclude "iteration_*.pth" --exclude "*eval/*" --exclude "*failed_train/*"
 
 mkdir -p "$HOME/cache"
 mkdir -p "$HOME/eval_dir"
@@ -42,7 +42,7 @@ genienlp predict \
   "$@"
 
 ls -R
-aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/${model}/${dataset}/eval/
+aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/${model}/${dataset}/eval/${pred_set_name}
 
 
 #aws s3 sync s3://almond-research/${owner}/workdir/${project} .
