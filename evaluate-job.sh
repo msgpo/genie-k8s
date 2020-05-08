@@ -2,7 +2,7 @@
 
 . /opt/genie-toolkit/lib.sh
 
-parse_args "$0" "owner project experiment model" "$@"
+parse_args "$0" "owner dataset_owner project task_name experiment dataset model" "$@"
 shift $n
 
 set -e
@@ -41,8 +41,9 @@ genienlp predict \
   --tasks ${task_name} \
   "$@"
 
+psn="${@: -1}"
 ls -R
-aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/${model}/${dataset}/eval/${pred_set_name}
+aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/${model}/${dataset}/eval/${psn}
 
 
 #aws s3 sync s3://almond-research/${owner}/workdir/${project} .

@@ -3,12 +3,18 @@
 . config
 . lib.sh
 
-parse_args "$0" "experiment model" "$@"
-shift $n
-check_config "IAM_ROLE OWNER IMAGE PROJECT"
+set -x
+set -e
 
-JOB_NAME=${OWNER}-evaluate-${experiment}-${model}
-cmdline="--owner ${OWNER} --project ${PROJECT} --experiment ${experiment} --model ${model} -- "$(requote "$@")
+check_config "IAM_ROLE OWNER DATASET_OWNER IMAGE PROJECT EVAL_TASK_NAME"
+
+parse_args "$0" "experiment dataset model" "$@"
+shift $n
+psn="${@: -1}"
+
+
+JOB_NAME=${OWNER}-evaluate-${experiment}-${model}-"${psn//_/-}"
+cmdline="--owner ${OWNER} --dataset_owner ${DATASET_OWNER} --project ${PROJECT} --task_name ${EVAL_TASK_NAME} --experiment ${experiment} --dataset ${dataset} --model ${model} -- "$(requote "$@")
 
 set -e
 set -x
