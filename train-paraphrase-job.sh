@@ -8,7 +8,7 @@ shift $n
 set -e
 set -x
 
-aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
+aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/ --exclude '*_cached_lm_*'
 
 modeldir="$HOME/$model"
 mkdir -p "$modeldir"
@@ -31,6 +31,5 @@ genienlp train-paraphrase \
   "$@"
 
 aws s3 sync $modeldir/ s3://almond-research/${owner}/models/${project}/${experiment}/${model}
-
 
 
