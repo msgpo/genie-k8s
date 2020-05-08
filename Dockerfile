@@ -5,12 +5,13 @@ MAINTAINER Thingpedia Admins <thingpedia-admins@lists.stanford.edu>
 WORKDIR /opt/genienlp/
 ARG GENIENLP_VERSION=master
 RUN pip3 install --upgrade pip
+RUN pip3 install wheel
 RUN git fetch && git checkout ${GENIENLP_VERSION} && pip3 install -e . && pip3 install 'git+https://github.com/LiyuanLucasLiu/RAdam#egg=radam'
 
 # uncomment the models you want to use
 # RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-multilingual-uncased+xlm-roberta-base
-# RUN decanlp cache-embeddings --d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking
-# RUN decanlp cache-embeddings --d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking-finetuned-squad
+# RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking
+# RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking-finetuned-squad
 # RUN chmod 0755 /usr/local/share/genienlp/embeddings/[0-9a-f]*
 
 # uncomment it you need Apex (for mixed precision training)

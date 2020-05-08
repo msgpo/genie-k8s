@@ -28,8 +28,9 @@ WORKDIR /usr/local/share/genienlp/embeddings
 RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-multilingual-uncased
 RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-uncased
 RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-cased
-RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings xlm-roberta-base
 RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-chinese
+RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings xlm-roberta-base
+RUN true 1 && genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bart-large
 RUN chmod 0755 /usr/local/share/genienlp/embeddings/[0-9a-f]*
 ENV GENIENLP_EMBEDDINGS=/usr/local/share/genienlp/embeddings
 
