@@ -43,7 +43,7 @@ genienlp predict \
 
 psn="${@: -1}"
 ls -R
-aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/${model}/${dataset}/eval/${psn}
+aws s3 sync $HOME/eval_dir s3://almond-research/${owner}/workdir/${project}/${experiment}/models/${model}/${dataset}/eval/${psn}
 
 
 #aws s3 sync s3://almond-research/${owner}/workdir/${project} .
