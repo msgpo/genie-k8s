@@ -4,16 +4,16 @@
 . lib.sh
 
 
-parse_args "$0" "skip_generation=false experiment input_dataset output_dataset filtering_model paraphrasing_model_full_path=None" "$@"
+parse_args "$0" "project skip_generation=false only_paraphrase=true experiment input_dataset input_split output_dataset filtering_model=None paraphrasing_model_full_path=None" "$@"
 shift $n
 check_config "IAM_ROLE OWNER DATASET_OWNER IMAGE PROJECT TRAIN_TASK_NAME"
 
 
 JOB_NAME=${OWNER}-paraphrase-${output_dataset}
-cmdline="--owner ${OWNER} --dataset_owner ${DATASET_OWNER} --project ${PROJECT} --experiment $experiment \
-         --input_dataset $input_dataset --output_dataset $output_dataset --filtering_model $filtering_model \
+cmdline="--owner ${OWNER} --dataset_owner ${DATASET_OWNER} --project ${project} --experiment $experiment \
+         --input_dataset $input_dataset --input_split $input_split --output_dataset $output_dataset --filtering_model $filtering_model \
          --paraphrasing_model_full_path $paraphrasing_model_full_path --skip_generation $skip_generation \
-         --task_name ${TRAIN_TASK_NAME} -- "$(requote "$@")
+         --only_paraphrase $only_paraphrase --task_name ${TRAIN_TASK_NAME} -- "$(requote "$@")
 
 set -e
 set -x
