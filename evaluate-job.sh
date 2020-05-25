@@ -66,6 +66,15 @@ ls -al
 mkdir -p tmp
 export GENIE_TOKENIZER_ADDRESS=tokenizer.default.svc.cluster.local:8888
 export TZ=America/Los_Angeles
-make geniedir=/opt/genie-toolkit project=$project experiment=$experiment owner=$owner input_eval_server="./dataset/${pred_languages}/${pred_set_name}.tsv" $experiment/${pred_set_name}/$model.results
-aws s3 sync $experiment/${pred_set_name}/ s3://almond-research/${owner}/workdir/${project}/$experiment/${pred_set_name}/
-cat $experiment/${pred_set_name}/$model.results
+echo $pred_languages
+IFS='+'
+read -ra PLS <<<"$pred_languages"
+echo "${PLS[@]}"
+
+for lang in "${PLS[@]}"; do
+  mkdir -p $experiment/${pred_set_name}/${lang}
+  make -B geniedir=/opt/genie-toolkit project=$project experiment=$experiment owner=$owner input_eval_server="./dataset/${lang}/${pred_set_name}.tsv" $experiment/${pred_set_name}/$model.results
+  aws s3 sync $experiment/${pred_set_name}/ s3://almond-research/${owner}/workdir/${project}/$experiment/${pred_set_name}/${lang}/
+  echo $lang
+  cat $experiment/${pred_set_name}/$model.results
+done

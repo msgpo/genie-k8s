@@ -7,7 +7,7 @@
 parse_args "$0" "project experiment dataset dataset_owner=${DATASET_OWNER} model task=${TRAIN_TASK_NAME} load_from=None num_gpus=1" "$@"
 shift $n
 
-if [ "$num_gpu" = "1" ]; then
+if [ "$num_gpus" = "1" ]; then
   GPU_NUM=1
 	GPU_TYPE="p3.2xlarge"
 else
