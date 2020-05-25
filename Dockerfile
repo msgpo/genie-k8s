@@ -5,14 +5,14 @@ MAINTAINER Thingpedia Admins <thingpedia-admins@lists.stanford.edu>
 WORKDIR /opt/genienlp/
 ARG GENIENLP_VERSION=master
 RUN pip3 install --upgrade pip
-RUN pip3 install wheel
 RUN git fetch && git checkout ${GENIENLP_VERSION} && pip3 install -e . && pip3 install 'git+https://github.com/LiyuanLucasLiu/RAdam#egg=radam'
 
 # uncomment the models you want to use
-# RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-base-multilingual-uncased+xlm-roberta-base
-# RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking
-# RUN genienlp cache-embeddings -d /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking-finetuned-squad
-# RUN chmod 0755 /usr/local/share/genienlp/embeddings/[0-9a-f]*
+#RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings bert-base-multilingual-uncased
+#RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings xlm-roberta-base
+#RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings xlm-roberta-large
+# RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking
+# RUN genienlp cache-embeddings --destdir /usr/local/share/genienlp/embeddings --embeddings bert-large-uncased-whole-word-masking-finetuned-squad
 
 # uncomment it you need Apex (for mixed precision training)
 # RUN yum install -y \
@@ -42,6 +42,9 @@ RUN yarn link thingtalk
 RUN yarn install
 
 COPY lib.sh generate-dataset-job.sh train-job.sh evaluate-job.sh paraphrase-job.sh train-paraphrase-job.sh ./
+
+#USER root
+#RUN chmod 0777 /usr/local/share/genienlp/embeddings/[0-9a-f]*
 
 # add user genie-toolkit
 RUN useradd -ms /bin/bash -r genie-toolkit

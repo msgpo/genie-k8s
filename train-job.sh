@@ -49,7 +49,7 @@ genienlp train \
   --exist_ok \
   --skip_cache \
   "$@" 
-  
+
 rm -fr "$modeldir/cache"
 rm -fr "$modeldir/dataset"
 aws s3 sync ${modeldir}/ s3://almond-research/${owner}/models/${project}/${experiment}/${model}
