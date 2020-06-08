@@ -2,7 +2,7 @@
 
 . /opt/genie-toolkit/lib.sh
 
-parse_args "$0" "owner dataset_owner task_name project experiment dataset model load_from" "$@"
+parse_args "$0" "owner dataset_owner task_name project experiment dataset model load_from train_languages eval_languages" "$@"
 shift $n
 
 set -e
@@ -15,7 +15,23 @@ if ! test  ${load_from} = 'None' ; then
 	aws s3 sync ${load_from} "$modeldir"/ --exclude "iteration_*.pth" --exclude "*eval/*"  --exclude "*.log"
 fi
 
-aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} ${HOME}/dataset/
+echo $train_languages
+IFS='+'; read -ra TLS <<<"$train_languages"
+echo "${TLS[@]}"
+
+for lang in "${TLS[@]}"; do
+  aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} ${HOME}/dataset/ --exclude "*" --include "*$lang*"
+done
+
+echo $eval_languages
+IFS='+'; read -ra ELS <<<"$eval_languages"
+echo "${ELS[@]}"
+
+for lang in "${ELS[@]}"; do
+  aws s3 sync s3://almond-research/${dataset_owner}/dataset/${project}/${experiment}/${dataset} ${HOME}/dataset/ --exclude "*" --include "*$lang*"
+done
+
+IFS=' '
 
 rm -fr "$modeldir/dataset"
 mkdir -p "$modeldir/dataset/"${task_name//_/\/}""
@@ -48,6 +64,8 @@ genienlp train \
   --val_every 1000 \
   --exist_ok \
   --skip_cache \
+  --train_languages $train_languages \
+  --eval_languages $eval_languages \
   "$@" 
 
 rm -fr "$modeldir/cache"

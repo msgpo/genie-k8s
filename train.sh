@@ -4,7 +4,7 @@
 . lib.sh
 
 
-parse_args "$0" "project experiment dataset dataset_owner=${DATASET_OWNER} model task=${TRAIN_TASK_NAME} load_from=None num_gpus=1" "$@"
+parse_args "$0" "project experiment dataset dataset_owner=${DATASET_OWNER} model task=${TRAIN_TASK_NAME} load_from=None num_gpus=1 train_languages eval_languages" "$@"
 shift $n
 
 if [ "$num_gpus" = "1" ]; then
@@ -18,7 +18,7 @@ fi
 check_config "IAM_ROLE OWNER DATASET_OWNER IMAGE PROJECT GPU_NUM GPU_TYPE"
 
 JOB_NAME=${OWNER}-train-${experiment}-${model}
-cmdline="--owner ${OWNER} --dataset_owner ${dataset_owner} --task_name \"${task}\" --project $project --experiment $experiment --dataset $dataset --model $model --load_from \"${load_from}\" -- "$(requote "$@")
+cmdline="--owner ${OWNER} --dataset_owner ${dataset_owner} --task_name \"${task}\" --project $project --experiment $experiment --dataset $dataset --train_languages $train_languages --eval_languages $eval_languages --model $model --load_from \"${load_from}\" -- "$(requote "$@")
 
 set -e
 set -x

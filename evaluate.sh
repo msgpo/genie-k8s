@@ -9,7 +9,7 @@ parse_args "$0" "project experiment dataset model pred_languages=en pred_set_nam
 shift $n
 
 
-JOB_NAME=${OWNER}-evaluate-${experiment}-${model}-"${pred_set_name//_/-}"
+JOB_NAME=${OWNER}-evaluate-"${experiment//_/-}"-${model}-"${pred_set_name//_/-}"
 cmdline="--owner ${OWNER} --dataset_owner ${DATASET_OWNER} --project ${project} --task_name ${EVAL_TASK_NAME} --experiment ${experiment} --dataset ${dataset} --model ${model} --pred_languages ${pred_languages} --pred_set_name ${pred_set_name} -- "$(requote "$@")
 
 set -e
