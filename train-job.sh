@@ -45,6 +45,7 @@ genienlp train \
   --val_every 1000 \
   --exist_ok \
   --skip_cache \
+  --subsample 1500000 \
   "$@" 
   
 rm -fr "$modeldir/cache"
