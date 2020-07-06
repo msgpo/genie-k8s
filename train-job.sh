@@ -2,7 +2,7 @@
 
 . /opt/genie-toolkit/lib.sh
 
-parse_args "$0" "s3_bucket owner dataset_owner task_name project experiment dataset model load_from" "$@"
+parse_args "$0" "s3_bucket owner dataset_owner task_name project experiment dataset model load_from load_dataset" "$@"
 shift $n
 
 set -e
@@ -13,6 +13,13 @@ mkdir -p "$modeldir"
 
 if ! test  ${load_from} = 'None' ; then
 	aws s3 sync ${load_from}/ "$modeldir"/ --exclude "iteration_*.pth" --exclude "*eval/*"  --exclude "*.log"
+fi
+
+if ! test  ${load_dataset} = 'None' ; then
+	aws s3 sync ${load_dataset}/ first-task-dataset/ --exclude "synthetic*.txt"
+  rm -fr "$modeldir/first-task-dataset"
+  mkdir "$modeldir/first-task-dataset"
+  ln -s "$HOME/first-task-dataset" "$modeldir/first-task-dataset"
 fi
 
 aws s3 sync --exclude "synthetic*.txt" s3://${s3_bucket}/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
@@ -34,6 +41,7 @@ mkdir -p "/shared/tensorboard/${project}/${experiment}/${owner}/${model}"
 
 genienlp train \
   --data "$modeldir/dataset" \
+  --first_task_data "$modeldir/first-task-dataset" \
   --embeddings ${GENIENLP_EMBEDDINGS} \
   --save "$modeldir" \
   --tensorboard_dir "/shared/tensorboard/${project}/${experiment}/${owner}/${model}" \
