@@ -19,7 +19,7 @@ if ! test  ${load_dataset} = 'None' ; then
 	aws s3 sync ${load_dataset}/ first-task-dataset/ --exclude "synthetic*.txt"
   rm -fr "$modeldir/first-task-dataset"
   mkdir "$modeldir/first-task-dataset"
-  ln -s "$HOME/first-task-dataset" "$modeldir/first-task-dataset"
+  ln -s "$HOME/first-task-dataset" "$modeldir/first-task-dataset/almond"
 fi
 
 aws s3 sync --exclude "synthetic*.txt" s3://${s3_bucket}/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
@@ -41,7 +41,7 @@ mkdir -p "/shared/tensorboard/${project}/${experiment}/${owner}/${model}"
 
 genienlp train \
   --data "$modeldir/dataset" \
-  --first_task_data "$modeldir/first-task-dataset" \
+  --first_task_dataset "$modeldir/first-task-dataset" \
   --embeddings ${GENIENLP_EMBEDDINGS} \
   --save "$modeldir" \
   --tensorboard_dir "/shared/tensorboard/${project}/${experiment}/${owner}/${model}" \
