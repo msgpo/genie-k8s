@@ -33,8 +33,8 @@ if [[ "$task_name" == *"multilingual"* ]] ; then
   ln -s ${HOME}/dataset/* $modeldir/dataset/almond/multilingual
 else
   aws s3 sync --exclude "synthetic*.txt" s3://${s3_bucket}/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
-  mkdir -p $modeldir/dataset/almond/multilingual
-  ln -s ${HOME}/dataset/* $modeldir/dataset/almond
+  mkdir -p $modeldir/dataset/almond/
+  ln -s ${HOME}/dataset/ $modeldir/dataset/almond
 fi
 
 ln -s $modeldir /home/genie-toolkit/current
