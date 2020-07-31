@@ -2,7 +2,7 @@
 
 . lib.sh
 . config
-check_config "IMAGE COMMON_IMAGE genie_version thingtalk_version genienlp_version"
+check_config "IMAGE COMMON_IMAGE genie_version thingtalk_version genienlp_version transformers_version"
 export AWS_PROFILE
 
 aws ecr get-login --no-include-email | bash
@@ -16,5 +16,6 @@ docker build -t ${IMAGE} \
   --build-arg GENIENLP_VERSION=${genienlp_version} \
   --build-arg THINGTALK_VERSION=${thingtalk_version} \
   --build-arg GENIE_VERSION=${genie_version} \
+  --build-arg TRANSFORMERS_VERSION=${transformers_version} \
   .
 docker push ${IMAGE}

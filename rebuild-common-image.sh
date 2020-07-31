@@ -2,7 +2,7 @@
 
 . lib.sh
 . config
-check_config "IMAGE COMMON_IMAGE genie_version thingtalk_version genienlp_version"
+check_config "IMAGE COMMON_IMAGE genie_version thingtalk_version genienlp_version transformers_version"
 export AWS_PROFILE
 
 aws ecr get-login --no-include-email | bash

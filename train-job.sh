@@ -2,7 +2,7 @@
 
 . /opt/genie-toolkit/lib.sh
 
-parse_args "$0" "s3_bucket owner dataset_owner task_name project experiment dataset model load_from train_languages eval_languages" "$@"
+parse_args "$0" "s3_bucket owner dataset_owner task_name project experiment dataset model load_from train_languages eval_languages dlg_side" "$@"
 shift $n
 
 set -e
@@ -31,20 +31,19 @@ if [[ "$task_name" == *"multilingual"* ]] ; then
   done
   mkdir -p $modeldir/dataset/almond/multilingual
   ln -s ${HOME}/dataset/* $modeldir/dataset/almond/multilingual
-else
+elif [[ "$task_name" == *"dialog"* || "$task_name" == *"contextual"* ]] ; then
   aws s3 sync --exclude "synthetic*.txt" s3://${s3_bucket}/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
+  mkdir -p $modeldir/dataset/almond/${dlg_side}
+  ln -s ${HOME}/dataset/* $modeldir/dataset/almond/${dlg_side}
+else
+  aws s3 sync s3://${s3_bucket}/${dataset_owner}/dataset/${project}/${experiment}/${dataset} dataset/
   mkdir -p $modeldir/dataset/almond/
-  ln -s ${HOME}/dataset/ $modeldir/dataset/almond
+  ln -s ${HOME}/dataset/* $modeldir/dataset/almond/
 fi
 
 ln -s $modeldir /home/genie-toolkit/current
 mkdir -p "/shared/tensorboard/${project}/${experiment}/${owner}/${model}"
 
-#on_error () {
-#  # on failure ship everything to s3
-#  aws s3 sync $modeldir/ s3://almond-research/${owner}/models/${experiment}/${model}/failed_train/
-#}
-#trap on_error ERR
 
 # print directory tree
 ls -R
